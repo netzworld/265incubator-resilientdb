@@ -42,7 +42,7 @@ var searchData=
   ['popstableseqhash_39',['PopStableSeqHash',['../dc/db0/classresdb_1_1CheckPointManager.html#a900e7f2a4f7043cdba68bd34303bdfb0',1,'resdb::CheckPointManager']]],
   ['populatetable_40',['GET /populatetable',['..//github/workspace/ecosystem/graphql/service/http_server/README.md#autotoc_md275',1,'']]],
   ['popwithsize_41',['PopWithSize',['../dd/d88/classresdb_1_1BlockingQueue.html#a13e81035f69d3c390d8a8e7e5a5d307c',1,'resdb::BlockingQueue']]],
-  ['port_42',['port',['../d8/d59/structLearnerConfig.html#a7e1ec90fa281b9856ee185b73657f0b5',1,'LearnerConfig::port'],['../df/dd9/structresdb_1_1VisualData.html#aece931bb5be3d98562446859b8f91cf2',1,'resdb::VisualData::port'],['../d8/d01/namespaceapp.html#ae996542be63ac459a38531f7c2dd0a49',1,'app.port']]],
+  ['port_42',['port',['../df/dd9/structresdb_1_1VisualData.html#aece931bb5be3d98562446859b8f91cf2',1,'resdb::VisualData::port'],['../d8/d01/namespaceapp.html#ae996542be63ac459a38531f7c2dd0a49',1,'app.port']]],
   ['port_5f_43',['port_',['../de/dc3/classresdb_1_1NetChannel.html#aa40b503ee56826b645a3d0f0be67f680',1,'resdb::NetChannel']]],
   ['ports_44',['Custom Ports',['..//github/workspace/README.md#autotoc_md913',1,'']]],
   ['post_20v1_20transactions_20commit_45',['POST /v1/transactions/commit',['..//github/workspace/ecosystem/graphql/service/http_server/README.md#autotoc_md269',1,'']]],

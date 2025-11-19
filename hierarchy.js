@@ -127,8 +127,6 @@ var hierarchy =
     ] ],
     [ "app.JSONScalar", "d7/d03/classapp_1_1JSONScalar.html", null ],
     [ "resdb::KeyGenerator", "d5/d5c/classresdb_1_1KeyGenerator.html", null ],
-    [ "Learner", "dc/d91/classLearner.html", null ],
-    [ "LearnerConfig", "d8/d59/structLearnerConfig.html", null ],
     [ "resdb::LockFreeCollectorPool", "d7/d31/classresdb_1_1LockFreeCollectorPool.html", null ],
     [ "resdb::LockFreeQueue< T >", "da/dd3/classresdb_1_1LockFreeQueue.html", null ],
     [ "resdb::LRUCache< KeyType, ValueType >", "d5/d3e/classresdb_1_1LRUCache.html", null ],

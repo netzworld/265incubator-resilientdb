@@ -266,8 +266,6 @@ var annotated_dup =
     [ "HelloHandler", "df/d35/classHelloHandler.html", "df/d35/classHelloHandler" ],
     [ "KVClient", "d6/da5/classKVClient.html", "d6/da5/classKVClient" ],
     [ "KVServiceTransactionManager", "d4/d4b/classKVServiceTransactionManager.html", "d4/d4b/classKVServiceTransactionManager" ],
-    [ "Learner", "dc/d91/classLearner.html", "dc/d91/classLearner" ],
-    [ "LearnerConfig", "d8/d59/structLearnerConfig.html", "d8/d59/structLearnerConfig" ],
     [ "QueryExecutor", "db/dc0/classQueryExecutor.html", "db/dc0/classQueryExecutor" ],
     [ "ResDBConfig", "d6/d06/classResDBConfig.html", "d6/d06/classResDBConfig" ],
     [ "ResDBKVClient", "d7/de4/classResDBKVClient.html", "d7/de4/classResDBKVClient" ],

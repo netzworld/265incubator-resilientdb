@@ -6,7 +6,7 @@ var searchData=
   ['performance_5fmanager_5f_3',['performance_manager_',['../db/deb/classresdb_1_1common_1_1Consensus.html#a4397d49d9b89f804562427923a7f2cbf',1,'resdb::common::Consensus::performance_manager_'],['../d0/ded/classresdb_1_1ConsensusManagerPBFT.html#a322584e996a88e4b6e9a1d378be54acf',1,'resdb::ConsensusManagerPBFT::performance_manager_'],['../d3/d20/classConsensusManagerPBFT.html#a322584e996a88e4b6e9a1d378be54acf',1,'ConsensusManagerPBFT::performance_manager_']]],
   ['picker_4',['picker',['../dd/d18/classresdb__driver_1_1pool_1_1Pool.html#a087643b8eff8b146aaa2df5804fab85e',1,'resdb_driver::pool::Pool']]],
   ['poe_5f_5',['poe_',['../df/d2d/classresdb_1_1poe_1_1Consensus.html#a0138a0e6f0113bf3b3c166304ff148d6',1,'resdb::poe::Consensus']]],
-  ['port_6',['port',['../d8/d59/structLearnerConfig.html#a7e1ec90fa281b9856ee185b73657f0b5',1,'LearnerConfig::port'],['../df/dd9/structresdb_1_1VisualData.html#aece931bb5be3d98562446859b8f91cf2',1,'resdb::VisualData::port'],['../d8/d01/namespaceapp.html#ae996542be63ac459a38531f7c2dd0a49',1,'app.port']]],
+  ['port_6',['port',['../df/dd9/structresdb_1_1VisualData.html#aece931bb5be3d98562446859b8f91cf2',1,'resdb::VisualData::port'],['../d8/d01/namespaceapp.html#ae996542be63ac459a38531f7c2dd0a49',1,'app.port']]],
   ['port_5f_7',['port_',['../de/dc3/classresdb_1_1NetChannel.html#aa40b503ee56826b645a3d0f0be67f680',1,'resdb::NetChannel']]],
   ['pre_5fverify_5ffunc_5f_8',['pre_verify_func_',['../dd/d4b/classresdb_1_1Commitment.html#accd36fb3a8e5aff5854cddeed6883e7d',1,'resdb::Commitment']]],
   ['prepare_5fmessage_5fcount_5ftimes_5flist_9',['prepare_message_count_times_list',['../df/dd9/structresdb_1_1VisualData.html#aefb483d0fbb70f0a0d12706141747da3',1,'resdb::VisualData']]],

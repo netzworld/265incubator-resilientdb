@@ -119,8 +119,8 @@ var NAVTREEINDEX1 =
 "d1/d72/kv__executor_8h.html":[2,0,5,2,1],
 "d1/d72/kv__executor_8h_source.html":[2,0,5,2,1],
 "d1/d74/namespaceresdb_1_1utxo.html":[0,0,11,8],
-"d1/d7e/acceptor_8cpp.html":[2,0,9,5,0],
-"d1/d7e/acceptor_8cpp_source.html":[2,0,9,5,0],
+"d1/d7e/acceptor_8cpp.html":[2,0,9,4,0],
+"d1/d7e/acceptor_8cpp_source.html":[2,0,9,4,0],
 "d1/d7e/namespaceresdb__driver_1_1driver.html":[0,0,12,2],
 "d1/d89/classresdb_1_1PerformanceManager.html":[0,0,11,53],
 "d1/d89/classresdb_1_1PerformanceManager.html":[1,0,1,49],
@@ -247,7 +247,7 @@ var NAVTREEINDEX1 =
 "d1/df5/classresdb__validator_1_1memoize_1_1ToDictWrapper.html#ae11bf3732f6b12d3ac7f48cc4e80636e":[1,0,4,2,1,2],
 "d1/dfa/wsgi_8py.html":[2,0,4,2,9],
 "d1/dfa/wsgi_8py_source.html":[2,0,4,2,9],
-"d1/dfd/mock__replica__communicator_8h.html":[2,0,9,4,10],
-"d1/dfd/mock__replica__communicator_8h_source.html":[2,0,9,4,10],
+"d1/dfd/mock__replica__communicator_8h.html":[2,0,9,3,10],
+"d1/dfd/mock__replica__communicator_8h_source.html":[2,0,9,3,10],
 "d2/d02/resdb__txn__accessor_8h.html":[2,0,7,0,5]
 };

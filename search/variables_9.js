@@ -6,7 +6,7 @@ var searchData=
   ['input_5f_3',['input_',['../d2/dc4/namespaceresdb__driver_1_1driver__experiment.html#a302dbb70b24b86ffd695027adad31bc6',1,'resdb_driver::driver_experiment']]],
   ['inputs_4',['inputs',['../d5/d37/classresdb__driver_1_1transaction_1_1Transaction.html#a1fc8e4e5d556160d86b24a5ded9c341b',1,'resdb_driver.transaction.Transaction.inputs'],['../d5/d13/classresdb__validator_1_1transaction_1_1Transaction.html#ada4d67e1fec7d392638421f8d7f8702d',1,'resdb_validator.transaction.Transaction.inputs'],['../d2/dc4/namespaceresdb__driver_1_1driver__experiment.html#a755beabbec78bde8c372403c14394aaa',1,'resdb_driver.driver_experiment.inputs']]],
   ['install_5frequires_5',['install_requires',['../dd/dc4/namespacesetup.html#abead4f26b530856f858f0d44c7cf2588',1,'setup']]],
-  ['ip_6',['ip',['../d8/d59/structLearnerConfig.html#a81d361129cbb7982ce8bb5eb62008d8c',1,'LearnerConfig::ip'],['../df/dd9/structresdb_1_1VisualData.html#a4000efc71d5d617a16ba70b9896392ae',1,'resdb::VisualData::ip']]],
+  ['ip_6',['ip',['../df/dd9/structresdb_1_1VisualData.html#a4000efc71d5d617a16ba70b9896392ae',1,'resdb::VisualData']]],
   ['ip_5f_7',['ip_',['../de/dc3/classresdb_1_1NetChannel.html#a24d6c52199ee695bdd3be51f7304b911',1,'resdb::NetChannel']]],
   ['is_5fasync_5fsend_5f_8',['is_async_send_',['../de/dc3/classresdb_1_1NetChannel.html#ad485baf6b6f9d13d279d2b1029ff9346',1,'resdb::NetChannel']]],
   ['is_5fclosing_9',['is_closing',['../d3/d97/classresilient__python__cache_1_1cache_1_1ResilientPythonCache.html#a1313a7bfa82abe262652d39623600ead',1,'resilient_python_cache::cache::ResilientPythonCache']]],
