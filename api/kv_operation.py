@@ -44,3 +44,11 @@ def get_value(key: str or int or float, config_path: str = current_dir + "/ip_ad
     :return: A string of the key's corresponding value.
     """
     return pybind_kv.get(str(key), os.path.abspath(config_path))
+
+def get_readonly(self, key):
+    """Perform a read-only get operation that bypasses consensus"""
+    request = KVRequest()
+    request.cmd = KVRequest.GET
+    request.key = key
+    
+    return self.client.send_readonly_request(request)

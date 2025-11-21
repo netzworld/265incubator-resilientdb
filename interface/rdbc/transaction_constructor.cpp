@@ -86,4 +86,69 @@ int TransactionConstructor::SendRequest(
   return -1;
 }
 
+//For learner
+int TransactionConstructor::SendReadOnlyRequest(
+    const google::protobuf::Message& message,
+    google::protobuf::Message* response,
+    Request::Type type) {
+  Request request;
+  request.set_type(type);
+  request.set_is_read_only(true);
+  message.SerializeToString(request.mutable_data());
+  
+  return SendToLearner(request, response);
+}
+
+//For learner
+int TransactionConstructor::SendToLearner(const Request& request,
+                                          google::protobuf::Message* response) {
+  const auto& learners = config_.GetLearnerInfos();
+  if (learners.empty()) {
+    LOG(ERROR) << "No learner configured for read-only requests";
+    return -2;
+  }
+  
+  const ReplicaInfo& learner = learners[0];
+  
+  std::string request_str;
+  if (!request.SerializeToString(&request_str)) {
+    LOG(ERROR) << "Failed to serialize request";
+    return -2;
+  }
+  
+  auto channel = std::make_unique<NetChannel>(learner.ip(), learner.port());
+  
+  int ret = channel->SendRawMessage(request_str);
+  if (ret != 0) {
+    LOG(ERROR) << "Failed to send read-only request to learner";
+    return -2;
+  }
+  
+  std::string response_str;
+  ret = channel->RecvRawMessageData(&response_str);
+  if (ret < 0) {
+    LOG(ERROR) << "Failed to receive response from learner";
+    return -2;
+  }
+  
+  Response resp;
+  if (!resp.ParseFromString(response_str)) {
+    LOG(ERROR) << "Failed to parse response";
+    return -2;
+  }
+  
+  auto response_data = GetResponseData(resp);
+  if (!response_data.ok()) {
+    LOG(ERROR) << "Failed to get response data";
+    return -2;
+  }
+  
+  if (response && !response->ParseFromString(*response_data)) {
+    LOG(ERROR) << "Failed to parse response message";
+    return -2;
+  }
+  
+  return 0;
+}
+
 }  // namespace resdb

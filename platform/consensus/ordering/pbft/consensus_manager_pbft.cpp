@@ -143,6 +143,13 @@ int ConsensusManagerPBFT::ConsensusCommit(std::unique_ptr<Context> context,
   // If it is in viewchange, push the request to the queue
   // for the requests from the new view which come before
   // the local new view done.
+
+  //For learner
+  if (request->is_read_only()) {
+    LOG(INFO) << "Routing read-only request to learner";
+    return RouteToLearner(std::move(context), std::move(request));
+  }
+
   recovery_->AddRequest(context.get(), request.get());
   if (config_.GetConfigData().enable_viewchange()) {
     view_change_manager_->MayStart();
@@ -187,7 +194,6 @@ int ConsensusManagerPBFT::InternalConsensusCommit(
     std::unique_ptr<Context> context, std::unique_ptr<Request> request) {
   // LOG(INFO) << "recv impl type:" << request->type() << " "
   //         << "sender id:" << request->sender_id()<<" seq:"<<request->seq();
-
   switch (request->type()) {
     case Request::TYPE_CLIENT_REQUEST:
       if (config_.IsPerformanceRunning()) {
@@ -261,6 +267,13 @@ void ConsensusManagerPBFT::SetupPerformanceDataFunc(
 void ConsensusManagerPBFT::SetPreVerifyFunc(
     std::function<bool(const Request&)> func) {
   commitment_->SetPreVerifyFunc(func);
+}
+
+//For learner
+int ConsensusManagerPBFT::RouteToLearner(std::unique_ptr<Context> context,
+                                         std::unique_ptr<Request> request) {
+  return message_manager_->ExecuteReadOnly(std::move(context), 
+                                           std::move(request));
 }
 
 }  // namespace resdb

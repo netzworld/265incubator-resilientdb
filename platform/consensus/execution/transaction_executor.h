@@ -72,6 +72,10 @@ class TransactionExecutor {
 
   void Prepare(std::unique_ptr<Request> request);
 
+  //For learner
+  std::unique_ptr<BatchUserResponse> ExecuteReadOnlyBatch(
+      const BatchUserRequest& batch_request);
+
  private:
   void Execute(std::unique_ptr<Request> request, bool need_execute = true);
   void OnlyExecute(std::unique_ptr<Request> request);

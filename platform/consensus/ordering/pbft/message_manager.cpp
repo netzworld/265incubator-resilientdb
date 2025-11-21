@@ -324,4 +324,29 @@ LockFreeCollectorPool* MessageManager::GetCollectorPool() {
   return collector_pool_.get();
 }
 
+//For learner
+int MessageManager::ExecuteReadOnly(std::unique_ptr<Context> context,
+                                    std::unique_ptr<Request> request) {
+  BatchUserRequest batch_request;
+  if (!batch_request.ParseFromString(request->data())) {
+    LOG(ERROR) << "Failed to parse read-only request";
+    return -2;
+  }
+
+  auto response = transaction_executor_->ExecuteReadOnlyBatch(batch_request);
+  
+  if (!response) {
+    LOG(ERROR) << "Failed to execute read-only batch";
+    return -2;
+  }
+  
+  if (context && context->client) {
+    std::string response_str;
+    response->SerializeToString(&response_str);
+    return context->client->SendRawMessage(response_str);
+  }
+  
+  return 0;
+}
+
 }  // namespace resdb

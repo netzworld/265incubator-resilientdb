@@ -495,5 +495,25 @@ void TransactionExecutor::PrepareMessage() {
   }
 }
 
+//For learner
+std::unique_ptr<BatchUserResponse> TransactionExecutor::ExecuteReadOnlyBatch(
+    const BatchUserRequest& batch_request) {
+  auto response = std::make_unique<BatchUserResponse>();
+  
+  for (const auto& sub_request : batch_request.user_requests()) {
+    auto result = transaction_manager_->ExecuteData(
+        sub_request.request().data());
+    
+    if (result) {
+      response->add_response(*result);
+    } else {
+      // Potential issue here with passing an empty string, come back to this point later
+      response->add_response("");
+    }
+  }
+  
+  return response;
+}
+
 
 }  // namespace resdb

@@ -112,6 +112,10 @@ class MessageManager {
 
   LockFreeCollectorPool* GetCollectorPool();
 
+  //For learner
+  int ExecuteReadOnly(std::unique_ptr<Context> context,
+                      std::unique_ptr<Request> request);
+
  private:
   bool IsValidMsg(const Request& request);
 

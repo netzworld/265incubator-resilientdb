@@ -58,6 +58,9 @@ class ConsensusManagerPBFT : public ConsensusManager {
  protected:
   int InternalConsensusCommit(std::unique_ptr<Context> context,
                               std::unique_ptr<Request> request);
+  //For learner                            
+  int RouteToLearner(std::unique_ptr<Context> context,
+                     std::unique_ptr<Request> request);
   void AddPendingRequest(std::unique_ptr<Context> context,
                          std::unique_ptr<Request> request);
   void AddComplainedRequest(std::unique_ptr<Context> context,

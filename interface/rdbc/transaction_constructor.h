@@ -40,8 +40,17 @@ class TransactionConstructor : public NetChannel {
                   google::protobuf::Message* response,
                   Request::Type type = Request::TYPE_CLIENT_REQUEST);
 
+  //For learner                
+  int SendReadOnlyRequest(const google::protobuf::Message& message,
+                          google::protobuf::Message* response,
+                          Request::Type type = Request::TYPE_CLIENT_REQUEST);
+
  private:
   absl::StatusOr<std::string> GetResponseData(const Response& response);
+
+  //For learner
+  int SendToLearner(const Request& request, 
+                    google::protobuf::Message* response);
 
  private:
   ResDBConfig config_;
