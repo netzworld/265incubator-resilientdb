@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -O2
+CXXFLAGS = -std=c++20 -Wall -Wextra -g -O2
 
 # object files
 OBJS = main.o replica.o

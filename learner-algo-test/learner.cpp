@@ -5,17 +5,6 @@
 
 using namespace std;
 
-Learner::Learner(int i_learner_id, int i_totalReplicas, int i_partialMessageCount, int i_partialModulus) {
-    learner_id = i_learner_id;
-    totalReplicas = i_totalReplicas;
-    partialMessageCount = i_partialMessageCount;
-    partialModulus = i_partialModulus;
-
-    journal = vector<string>(0);
-}
-
-
-
 uint32_t Learner::modpow(uint32_t a, uint32_t e, uint32_t p) {
     uint32_t r = 1;
     while (e > 0) {

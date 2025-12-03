@@ -110,14 +110,14 @@ string decode(vector<vector<uint32_t>> Fs, int n, int m, int p) {
     vector<vector<uint16_t>> A = gen_A(n, m, p);
 
     vector<vector<uint16_t>> Ap;
-    for (int i = 0; i < m; i++) {
+    for (auto i = 0; i < m; i++) {
         Ap.push_back(A[i]);
     }
 
     vector<vector<uint16_t>> Ainv = invertMatrix(Ap, p);
 
-    for (int i = 0; i < Ainv.size(); i++) {
-        for (int j = 0; j < Ainv[i].size(); j++) {
+    for (auto i = 0; i < Ainv.size(); i++) {
+        for (auto j = 0; j < Ainv[i].size(); j++) {
             cout << Ainv[i][j];
             cout << " ";
         }
@@ -125,9 +125,9 @@ string decode(vector<vector<uint32_t>> Fs, int n, int m, int p) {
     }
 
     string hehe = "";
-    for (int i_iter = 0; i_iter < Fs[0].size(); i_iter++) { // iterate through each block of m bytes
+    for (auto i_iter = 0; i_iter < Fs[0].size(); i_iter++) { // iterate through each block of m bytes
         
-        for (int b_iter = 0; b_iter < m; b_iter++) { // iterate through each byte
+        for (auto b_iter = 0; b_iter < m; b_iter++) { // iterate through each byte
 
             uint32_t mid = 0;
             for (int m_iter = 0; m_iter < m; m_iter++) { // do dot product
@@ -165,6 +165,14 @@ int main() {
     Fs.push_back(um2.bytes);
     Fs.push_back(um3.bytes);
 
+    for(auto i : Fs){
+        for (auto j : i) {
+            cout << j << " ";
+        }
+        cout << endl;
+    }
+    cout << "FS generated" << endl;
+    
     string hehe = decode(Fs, 4, 3, 257);
 
     cout << hehe << endl;

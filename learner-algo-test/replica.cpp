@@ -15,7 +15,7 @@ Replica::Replica(int i_replica_id, int i_totalReplicas, int i_partialMessageCoun
 UpdateLearnerMessage Replica::createUpdateLearnerMessage(string data) {
 
     int n = totalReplicas;
-    int m = partialMessageCount;
+    uint32_t m = partialMessageCount;
     int p = partialModulus;
 
     UpdateLearnerMessage msg;
@@ -29,23 +29,20 @@ UpdateLearnerMessage Replica::createUpdateLearnerMessage(string data) {
 
     vector<vector<uint16_t>> A = gen_A();
 
-    vector<uint32_t> F_i;
+    // vector<uint32_t> F_i;
 
     uint32_t iter = 0;
     uint32_t c_ik = 0;
     for (int d = 0; d < data.size(); d++) { // data MUST BE A MULTIPLE OF m
-        c_ik = (c_ik + A[id][iter] * data[d]) % p;
+      c_ik = (c_ik + A[replica_id][iter] * (uint32_t)(unsigned char)data[d]) % p;
+      iter++;
+      if (iter == m) {
+        msg.bytes.push_back(c_ik);
 
-        iter++;
-        if (iter == m) {
-            F_i.push_back(c_ik);
-            
-            c_ik = 0;
-            iter = 0;
-        }
+        c_ik = 0;
+        iter = 0;
+      }
     }
-
-    msg.bytes = F_i;
 
     return msg;
 }
