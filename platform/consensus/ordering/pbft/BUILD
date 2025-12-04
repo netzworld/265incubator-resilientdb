@@ -104,6 +104,7 @@ cc_library(
     srcs = ["commitment.cpp"],
     hdrs = ["commitment.h"],
     deps = [
+        "//common/crypto:hash",
         ":message_manager",
         ":response_manager",
         "//common/utils",

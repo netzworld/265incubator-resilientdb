@@ -85,32 +85,21 @@ int TransactionConstructor::SendRequest(
   }
   return -1;
 }
-// NEW: Send a read-only request. If learner nodes are configured, route the
-// request to a learner; otherwise fall back to a regular replica.
+// NEW: Send a read-only request through a replica (proxy decides on learners).
 
 int TransactionConstructor::SendReadOnlyRequest(
     const google::protobuf::Message& message, Request::Type type) {
-  const auto& learners = config_.GetLearnerInfos();
-  if (!learners.empty()) {
-    NetChannel::SetDestReplicaInfo(learners[0]);
-  } else {
-    NetChannel::SetDestReplicaInfo(config_.GetReplicaInfos()[0]);
-  }
+  NetChannel::SetDestReplicaInfo(config_.GetReplicaInfos()[0]);
 
   return NetChannel::SendRequest(message, type, false);
 }
 
-// NEW: Send a read-only request and wait for a response. Routed to learners
-// when available, with fallback to replicas.
+// NEW: Send a read-only request and wait for a response through a replica;
+// the proxy will forward to learners if configured.
 int TransactionConstructor::SendReadOnlyRequest(
     const google::protobuf::Message& message,
     google::protobuf::Message* response, Request::Type type) {
-  const auto& learners = config_.GetLearnerInfos();
-  if (!learners.empty()) {
-    NetChannel::SetDestReplicaInfo(learners[0]);
-  } else {
-    NetChannel::SetDestReplicaInfo(config_.GetReplicaInfos()[0]);
-  }
+  NetChannel::SetDestReplicaInfo(config_.GetReplicaInfos()[0]);
 
   int ret = NetChannel::SendRequest(message, type, true);
   if (ret == 0) {

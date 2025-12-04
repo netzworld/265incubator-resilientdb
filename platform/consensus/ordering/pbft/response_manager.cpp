@@ -19,7 +19,11 @@
 
 #include "platform/consensus/ordering/pbft/response_manager.h"
 
+#include <condition_variable>
+#include <chrono>
 #include <glog/logging.h>
+#include <mutex>
+#include <thread>
 
 #include "common/utils/utils.h"
 #include "interface/rdbc/net_channel.h"
@@ -420,8 +424,9 @@ void ResponseManager::MonitoringClientTimeOut() {
 
 bool ResponseManager::ForwardReadOnlyToLearner(Context* context,
                                                Request* user_request) {
-  if (!learner_info_.has_value() || context == nullptr ||
-      context->client == nullptr || user_request == nullptr) {
+  const auto& learners = config_.GetLearnerInfos();
+  if (learners.empty() || context == nullptr || context->client == nullptr ||
+      user_request == nullptr) {
     return false;
   }
   if (user_request->type() != Request::TYPE_CLIENT_REQUEST) {
@@ -436,30 +441,68 @@ bool ResponseManager::ForwardReadOnlyToLearner(Context* context,
     return false;
   }
 
-  NetChannel learner_channel(learner_info_->ip(), learner_info_->port());
-  learner_channel.SetRecvTimeout(100000);  // 100ms
-
   std::string payload;
   if (!kv_request.SerializeToString(&payload)) {
     return false;
   }
 
-  if (learner_channel.SendRawMessageData(payload) != 0) {
+  std::mutex resp_mu;
+  std::condition_variable resp_cv;
+  bool has_response = false;
+  std::string resp_payload;
+  const auto deadline =
+      std::chrono::steady_clock::now() + std::chrono::milliseconds(100);
+
+  std::vector<std::thread> workers;
+  workers.reserve(learners.size());
+
+  for (const auto& learner : learners) {
+    workers.emplace_back([&, learner]() {
+      NetChannel learner_channel(learner.ip(), learner.port());
+      learner_channel.SetRecvTimeout(100000);  // 100ms
+
+      if (learner_channel.SendRawMessageData(payload) != 0) {
+        return;
+      }
+
+      std::string learner_resp;
+      if (learner_channel.RecvRawMessageData(&learner_resp) <= 0) {
+        return;
+      }
+
+      KVResponse learner_response;
+      if (!learner_response.ParseFromString(learner_resp)) {
+        return;
+      }
+
+      {
+        std::lock_guard<std::mutex> lk(resp_mu);
+        if (has_response) {
+          return;
+        }
+        has_response = true;
+        resp_payload = std::move(learner_resp);
+      }
+      resp_cv.notify_one();
+    });
+  }
+
+  {
+    std::unique_lock<std::mutex> lk(resp_mu);
+    resp_cv.wait_until(lk, deadline, [&] { return has_response; });
+  }
+
+  for (auto& worker : workers) {
+    if (worker.joinable()) {
+      worker.join();
+    }
+  }
+
+  if (!has_response) {
     return false;
   }
 
-  // Await learner response; if nothing returns, fall back to PBFT.
-  std::string learner_resp;
-  if (learner_channel.RecvRawMessageData(&learner_resp) <= 0) {
-    return false;
-  }
-
-  KVResponse learner_response;
-  if (!learner_response.ParseFromString(learner_resp)) {
-    return false;
-  }
-
-  if (context->client->SendRawMessageData(learner_resp) != 0) {
+  if (context->client->SendRawMessageData(resp_payload) != 0) {
     return false;
   }
   return true;
