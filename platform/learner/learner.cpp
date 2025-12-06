@@ -143,7 +143,7 @@ bool Learner::ProcessBroadcast(resdb::Socket* socket,
     resdb::ResDBMessage envelope;
     if (!envelope.ParseFromString(payload)) {
 
-        LOG(INFO) << "HERE 1";
+        // LOG(INFO) << "HERE 1";
         resdb::KVRequest kv_request;
         if (kv_request.ParseFromString(payload)) {
             if (HandleReadOnlyRequest(socket, kv_request)) {
@@ -209,13 +209,13 @@ void Learner::HandleLearnerUpdate(resdb::LearnerUpdate learnerUpdate) {
 
     std::string block_hash = learnerUpdate.block_hash();
     int c_seq = learnerUpdate.seq();
-    int sender_id = learnerUpdate.sender_id();
+    // int sender_id = learnerUpdate.sender_id();
     int excess_bytes = learnerUpdate.excess_bytes();
 
     int blockIndex = c_seq / config_.block_size - 1;
 
     // fill sequence status with "havent started" if variable doesnt exist yet
-    while (sequence_status.size() < blockIndex + 1) {
+    while (sequence_status.size() < static_cast<size_t>(blockIndex + 1)) {
         sequence_status.push_back(0);
     }
     
@@ -286,7 +286,7 @@ void Learner::HandleLearnerUpdate(resdb::LearnerUpdate learnerUpdate) {
 
                     std::vector<int> inds;
                     std::vector<int> rep_ids;
-                    for (int i = 0; i < choice.size(); i++) {
+                    for (size_t i = 0; i < choice.size(); i++) {
                         if (choice[i]) {
                             inds.push_back(i);
                             rep_ids.push_back(lus[i].sender_id());
