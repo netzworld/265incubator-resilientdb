@@ -107,7 +107,6 @@ cc_library(
         "//common/crypto:hash",
         ":message_manager",
         ":response_manager", 
-        "//common/crypto:hash",
         "//common/utils",
         "//platform/common/queue:batch_queue",
         "//platform/config:resdb_config",
