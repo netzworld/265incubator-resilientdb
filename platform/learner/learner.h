@@ -25,6 +25,7 @@
 #include <unordered_set>
 #include <vector>
 #include <tuple>
+#include <mutex>
 
 #include "chain/storage/storage.h"
 #include "proto/kv/kv.pb.h"
@@ -70,6 +71,7 @@ private:
     std::vector<std::vector<uint16_t>> invertMatrix(std::vector<std::vector<uint16_t>> A, int p);
     std::vector<std::vector<uint16_t>> gen_A(std::vector<int> inds);
     bool GetNextCombination(std::vector<bool> &choice, bool first);
+    void ExecuteRequest(std::string requestStr);
 
 private:
     LearnerConfig config_;
@@ -90,4 +92,5 @@ private:
     std::vector<int> sequence_status; // 0 = not started, 1 = unknown valid hash, 2 = known valid hash, 3 = completed
     std::vector<resdb::LearnerUpdate> learnerUpdates;
     std::vector<std::tuple<int, std::string, int>> hashCounts;
+    std::mutex m;
 };

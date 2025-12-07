@@ -27,6 +27,7 @@
 #include <string>
 #include <thread>
 #include <tuple>
+#include <mutex>
 
 #include <glog/logging.h>
 #include <nlohmann/json.hpp>
@@ -169,24 +170,15 @@ bool Learner::ProcessBroadcast(resdb::Socket* socket,
   resdb::LearnerUpdate request;
   if (request.ParseFromString(envelope.data())) {
 
-    if (request.sender_id() == 0) return true;
-
-    // LOG(INFO) << "DATA: " << request.data();
-    // LOG(INFO) << "HASH: " << request.block_hash();
-    // LOG(INFO) << "SEQ: " << request.seq();
-    LOG(INFO) << "S_ID: " << request.sender_id();
-    // LOG(INFO) << "excess_bytes: " << request.excess_bytes();
+        if (request.sender_id() == 0) return true;
 
     HandleLearnerUpdate(request);
 
-    ++total_messages_;
-    total_bytes_.fetch_add(payload.size());
-    last_type_.store(-1);
-    last_seq_.store(static_cast<int64_t>(request.seq()));
-    last_sender_.store(static_cast<int>(request.sender_id()));
-    last_payload_bytes_.store(request.data_size());
-    return true;
-  }
+        ++total_messages_;
+        total_bytes_.fetch_add(payload.size());
+
+        return true;
+    }
 
   ++total_messages_;
   total_bytes_.fetch_add(envelope.data().size());
@@ -199,7 +191,7 @@ bool Learner::ProcessBroadcast(resdb::Socket* socket,
 
 void Learner::HandleLearnerUpdate(resdb::LearnerUpdate learnerUpdate) {
 
-    LOG(INFO) << "START HANDLE";
+    std::lock_guard<std::mutex> lock(m);
 
     std::string block_hash = learnerUpdate.block_hash();
     int c_seq = learnerUpdate.seq();
@@ -215,7 +207,6 @@ void Learner::HandleLearnerUpdate(resdb::LearnerUpdate learnerUpdate) {
     
     switch (sequence_status[blockIndex]) {
         case 0: {
-            LOG(INFO) << "CASE 0";
             hashCounts.push_back(std::tuple(blockIndex, block_hash, 1));
             learnerUpdates.push_back(learnerUpdate);
             sequence_status[blockIndex] = 1;
@@ -229,8 +220,6 @@ void Learner::HandleLearnerUpdate(resdb::LearnerUpdate learnerUpdate) {
         case 1: {
         }
         case 2: {
-            LOG(INFO) << "CASE 1/2: " << sequence_status[blockIndex];
-
             std::tuple<int, std::string, int> *valid_hc = nullptr;
 
             if (sequence_status[blockIndex] == 1) {
@@ -336,19 +325,24 @@ void Learner::HandleLearnerUpdate(resdb::LearnerUpdate learnerUpdate) {
                     std::string final_hash = resdb::utils::CalculateSHA256Hash(raw_bytes);
 
                     if (final_hash == block_hash) { // we have reconstructed the batch
-                        LOG(INFO) << "RECONSTRUCTED" << c_seq;
+
+                        LOG(INFO) << "RECONSTRUCTED " << c_seq << " FROM " << rep_ids[0] << " " << rep_ids[1];
 
                         resdb::RequestBatch batch;
                         if (batch.ParseFromArray(raw_bytes.data(), static_cast<int>(raw_bytes.size()))) {
-                            std::vector<resdb::Request> out;
+                            resdb::BatchUserRequest batch_request;
                             for (int i = 0; i < batch.requests_size(); ++i) {
-                                out.push_back(batch.requests(i)); // copies each Request
-                                LOG(INFO) << out[i].seq();
+                                batch_request.ParseFromString(batch.requests()[i].data());
+
+                                for (int j = 0; j < batch_request.user_requests().size(); j++) {
+                                    ExecuteRequest(batch_request.user_requests()[j].request().data());
+                                }
                             }
                             
                         }
 
                         sequence_status[blockIndex] = 3;
+                        return;
                     }                  
 
                 }
@@ -359,6 +353,26 @@ void Learner::HandleLearnerUpdate(resdb::LearnerUpdate learnerUpdate) {
     
         }
 
+}
+
+
+void Learner::ExecuteRequest(std::string requestStr) {
+    resdb::KVRequest kv_request;
+    if (!kv_request.ParseFromString(requestStr)) {
+        return;
+    }
+
+    if (kv_request.cmd() == resdb::KVRequest::SET) {
+        storage_->SetValue(kv_request.key(), kv_request.value());
+        if (known_keys_.find(kv_request.key()) == known_keys_.end()) {
+            known_keys_.insert(kv_request.key());
+        }
+    } else if (kv_request.cmd() == resdb::KVRequest::SET_WITH_VERSION) {
+        storage_->SetValueWithVersion(kv_request.key(), kv_request.value(), kv_request.version());
+        if (known_keys_.find(kv_request.key()) == known_keys_.end()) {
+            known_keys_.insert(kv_request.key());
+        }
+    }
 }
 
 uint32_t Learner::modpow(uint32_t a, uint32_t e, uint32_t p) {
