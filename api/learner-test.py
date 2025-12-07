@@ -7,9 +7,14 @@ RED   = "\033[31m"
 GREEN = "\033[32m"
 RESET = "\033[0m"
 entries = 30
+delay = 4
+
+for i in range(delay, 0, -1):
+    print(f'Test begins in: {i}')
+    time.sleep(1)
 
 for i in range(entries):
-    set_value(f"test{i}", f"Value {i}")
+    print(set_value(f"test{i}", f"Value {i}"))
 
 # Learner reads
 avg_time_readonly = 0.0

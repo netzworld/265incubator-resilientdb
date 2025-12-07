@@ -19,7 +19,11 @@
 # under the License.
 #
 
-# ./service/tools/kv/server_tools/generate_config.sh
+mode="$1"
+if [[ "$mode" = "-c" ]]; then
+    ./service/tools/kv/server_tools/generate_config.sh
+    mode="-w"
+fi
 ./service/tools/kv/server_tools/start_kv_service_learner.sh
 
 if [[ "$2" =~ ^[0-9]+$ ]]; then
@@ -28,11 +32,11 @@ else
     lines=2
 fi
 
-if [ "$1" = "-w" ]; then
+if [ "$mode" = "-w" ]; then
     watch -n 1 tail -n "$lines" logs/*.log
-elif [ "$1" = "-l" ]; then
+elif [ "$mode" = "-l" ]; then
     tail -f logs/learner.log
-elif [ "$1" = "-a" ]; then
+elif [ "$mode" = "-a" ]; then
     tail -f logs/*.log
 else
     tail -f /dev/null
